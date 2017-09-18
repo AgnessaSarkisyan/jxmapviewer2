@@ -45,6 +45,7 @@ The content of this project are also available at *Maven Central* and can be ref
 #### What we plan to do ..
 
  * Fix bugs that were posted on http://java.net/jira/browse/SWINGX_WS ( mostly complete )
+ * Add support for map rotation
 
 #### License
 This project has been licensed under the GNU Lesser General Public License (LGPL)
