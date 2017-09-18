@@ -16,6 +16,7 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Insets;
 import java.awt.Rectangle;
+import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
@@ -24,6 +25,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.net.URL;
 import java.util.Set;
+import java.lang.Math;
 
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
@@ -36,6 +38,10 @@ import org.jxmapviewer.viewer.TileFactory;
 import org.jxmapviewer.viewer.TileFactoryInfo;
 import org.jxmapviewer.viewer.TileListener;
 import org.jxmapviewer.viewer.empty.EmptyTileFactory;
+
+import static java.lang.Math.PI;
+import static java.lang.Math.cos;
+import static java.lang.Math.sin;
 
 /**
  * A tile oriented map component that can easily be used with tile sources
@@ -379,11 +385,31 @@ public class JXMapViewer extends JPanel implements DesignMode
 	{
 		Insets insets = getInsets();
 		// calculate the "visible" viewport area in pixels
+		AffineTransform transform = new AffineTransform();
+		double angle = PI/2;
+		//transform = transform.getRotateInstance(PI/2);
+		//transform.rotate(PI/2);
+		//centr = transform.transform(centr,null);
 		int viewportWidth = getWidth() - insets.left - insets.right;
 		int viewportHeight = getHeight() - insets.top - insets.bottom;
-		double viewportX = (centr.getX() - viewportWidth / 2);
+		double viewportX = (centr.getX() - viewportWidth/2 + viewportWidth/2*cos(angle));
+		double viewportY = (centr.getY() - viewportHeight/2 + viewportHeight/2*sin(angle));
+		double viewport2X = (centr.getX() + viewportWidth /2 + viewportWidth/2*cos(angle));
+		double viewport2Y = (centr.getY() + viewportHeight /2 + viewportHeight/2*sin(angle));
+		double minX = Math.min(viewportX, viewport2X);
+		double minY = Math.min(viewportY, viewport2Y);
+		double maxX = Math.max(viewportX, viewport2X);
+		double maxY = Math.max(viewportY, viewport2Y);
+	/*	double viewportX = (centr.getX() - viewportWidth / 2);
 		double viewportY = (centr.getY() - viewportHeight / 2);
-		return new Rectangle((int) viewportX, (int) viewportY, viewportWidth, viewportHeight);
+		double viewport2X = (centr.getX() + viewportWidth / 2 );
+		double viewport2Y = (centr.getY() - viewportHeight / 2);
+		double viewport3X = (centr.getX() + viewportWidth / 2 );
+		double viewport3Y = (centr.getY() + viewportHeight / 2 );
+		double viewport4X = (centr.getX() - viewportWidth / 2);
+		double viewport4Y = (centr.getY() + viewportHeight / 2 );*/
+		return new Rectangle((int) minX, (int) minY, (int)(maxX-minX), (int)(maxY-minY));
+	//	return new Rectangle((int) viewportX, (int) viewportY, viewportWidth, viewportHeight);
 	}
 
 	/**

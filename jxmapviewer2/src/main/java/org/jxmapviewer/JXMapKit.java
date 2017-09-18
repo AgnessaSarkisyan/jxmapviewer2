@@ -43,6 +43,8 @@ import org.jxmapviewer.viewer.Waypoint;
 import org.jxmapviewer.viewer.WaypointPainter;
 import org.jxmapviewer.viewer.bmng.CylindricalProjectionTileFactory;
 
+import static java.lang.Math.PI;
+
 /**
  * <p>The JXMapKit is a pair of JXMapViewers preconfigured to be easy to use
  * with common features built in.  This includes zoom buttons, a zoom slider,
@@ -108,6 +110,7 @@ public class JXMapKit extends JPanel
 
 		setTileFactory(new CylindricalProjectionTileFactory());
 
+		mainMap.setAngle(PI/2);
 		mainMap.setCenterPosition(new GeoPosition(0, 0));
 		miniMap.setCenterPosition(new GeoPosition(0, 0));
 		mainMap.setRestrictOutsidePanning(true);
