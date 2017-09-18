@@ -96,6 +96,11 @@ public class JXMapViewer extends JPanel implements DesignMode
 	private GeoPosition addressLocation;
 
 	/**
+	 * The rotation angle of the map in radians.
+	 */
+	private double angle = 0.0;
+
+	/**
 	 * The overlay to delegate to for painting the "foreground" of the map component. This would include painting
 	 * waypoints, day/night, etc. Also receives mouse events.
 	 */
@@ -159,8 +164,19 @@ public class JXMapViewer extends JPanel implements DesignMode
 		{
 			int z = getZoom();
 			Rectangle viewportBounds = getViewportBounds();
+
+            if (g instanceof Graphics2D)
+            {
+                Graphics2D g2 = (Graphics2D) g;
+                g2.rotate(getAngle(), viewportBounds.getWidth()/2.0, viewportBounds.getHeight()/2.0);
+            }
 			drawMapTiles(g, z, viewportBounds);
 			drawOverlays(z, g, viewportBounds);
+            if (g instanceof Graphics2D)
+            {
+                Graphics2D g2 = (Graphics2D) g;
+                g2.rotate(-getAngle(), viewportBounds.getWidth()/2.0, viewportBounds.getHeight()/2.0);
+            }
 		}
 
 		super.paintBorder(g);
@@ -434,6 +450,22 @@ public class JXMapViewer extends JPanel implements DesignMode
 
 		firePropertyChange("addressLocation", old, getAddressLocation());
 		repaint();
+	}
+
+	/**
+	 * Gets the rotation angle of the map in radians
+	 * @return the rotation angle of the map in radians
+	 */
+	public double getAngle() {
+		return angle;
+	}
+
+	/**
+	 * Set the rotation angle of the map in radians
+	 * @param angle rotation angle of the map in radians
+	 */
+	public void setAngle(double angle) {
+		this.angle = angle;
 	}
 
 	/**
